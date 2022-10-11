@@ -15,10 +15,10 @@ namespace PhoneBookApp
 
     public class Contact
     {
-        private string? name { get; set; }
-        private string? surname { get; set; }
-        private string? phonenum { get; set; }
-        private Preference preference { get; set; }
+        public string? name { get; set; }
+        public string? surname { get; set; }
+        public string? phonenum { get; set; }
+        public Preference preference { get; set; }
 
         public Contact(string name, string surname, string phonenum, Preference preference)
         {

@@ -14,8 +14,8 @@ namespace PhoneBookApp
     }
     public class Call
     {
-        private DateTime callTime { get; set; }
-        private Status status { get; set; }
+        public DateTime callTime { get; set; }
+        public Status status { get; set; }
 
         public Call(DateTime callTime, Status status)
         {
