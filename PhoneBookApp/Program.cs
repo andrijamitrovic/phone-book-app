@@ -8,8 +8,99 @@ namespace PhoneBookApp
 
         static void Main(string[] args)
         {
+            Program p = new();
+            while (true)
+            {
+                Console.Clear();
+                p.WriteMenu();
+                int key = int.Parse(Console.ReadLine());
+                switch (key)
+                {
+                    case 1:
+                        Console.Clear();
+                        p.ListAllContacts();
+                        Console.WriteLine("Press any key to go back\n");
+                        Console.ReadLine();
+                        break;
+                    case 2:
+                        Console.Clear();
+                        p.AddNewContact();
+                        Console.WriteLine("Press any key to go back\n");
+                        Console.ReadLine();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("Enter the contact's phonenum: \n");
+                        string phonenumDel = Console.ReadLine();
+                        while(p.DeleteContact(phonenumDel) == false)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Incorrect phonenum! Enter the contact's phonenum: \n");
+                            phonenumDel = Console.ReadLine();
+                        }
+                        Console.WriteLine("Press any key to go back\n");
+                        Console.ReadLine();
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("Enter the contact's phonenum: \n");
+                        string phonenumPrefEdit = Console.ReadLine();
+                        while (p.EditPreference(phonenumPrefEdit) == false)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Incorrect phonenum! Enter the contact's phonenum: \n");
+                            phonenumPrefEdit = Console.ReadLine();
+                        }
+                        Console.WriteLine("Press any key to go back\n");
+                        Console.ReadLine();
+                        break;
+                }
+            }
+        }
 
-            
+        private bool EditPreference(string? phonenumPrefEdit)
+        {
+            Contact? EditedContact = null;
+            foreach (Contact contact in calls.Keys)
+            {
+                if (contact.phonenum == phonenumPrefEdit)
+                    EditedContact = contact;
+            }
+            if (EditedContact == null)
+                return false;
+
+            bool correct = false;
+            Preference preference = Preference.normal;
+
+            while (correct == false)
+            {
+                Console.WriteLine("Contact preference: \n 1. Favourite \n 2. Normal \n 3. Blocked");
+                int pref = int.Parse(Console.ReadLine());
+
+                switch (pref)
+                {
+                    case 1:
+                        correct = true;
+                        preference = Preference.favourite;
+                        break;
+                    case 2:
+                        correct = true;
+                        preference = Preference.normal;
+                        break;
+                    case 3:
+                        correct = true;
+                        preference = Preference.blocked;
+                        break;
+                    default:
+                        Console.WriteLine("Non-existant preference selected! Select one from bellow: \n");
+                        break;
+                }
+            }
+            Call[]? callsToCopy = calls[EditedContact];
+            calls.Remove(EditedContact);
+            EditedContact.preference = preference;
+            calls.Add(EditedContact, callsToCopy);
+            return true;
         }
 
         public void WriteMenu()
@@ -25,6 +116,8 @@ namespace PhoneBookApp
 
         public void ListAllContacts()
         {
+            if(calls == null)
+                Console.WriteLine("No contacts");
             foreach (var contact in calls.Keys)
             {
                 Console.WriteLine("Contact name: " + contact.name
@@ -72,5 +165,21 @@ namespace PhoneBookApp
             Contact contact = new Contact(name, surname, phonenum, preference);
             calls.Add(contact, null);
         }
+        
+        public bool DeleteContact(string phonenum)
+        {
+            Contact? DeletedContact = null;
+            foreach(Contact contact in calls.Keys)
+            {
+                if(contact.phonenum == phonenum)
+                    DeletedContact = contact;
+            }
+            if (DeletedContact == null)
+                return false;
+
+            calls.Remove(DeletedContact);
+            return true;
+        }
+
     }
 }
